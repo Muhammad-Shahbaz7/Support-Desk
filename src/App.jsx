@@ -12,27 +12,7 @@ import api from './api'
 import { commandHelp, parseWorkspaceCommand } from './workspaceCommand'
 import { applyWorkspaceCommand } from './workspaceCommandActions'
 
-const initialTickets = [
-  { id: 1042, subject: 'Invoice export returns a blank PDF', customer: 'Maya Chen', initials: 'MC', email: 'maya.chen@acme.co', description: 'The finance team receives a blank PDF when exporting the monthly invoice report.', department: 'Finance support', channel: 'Email', priority: 'Critical', status: 'Open', assignee: 'Kiran Shah', sla: '00:42 left', created: '12 min ago', dueDate: 'Today, 9:30 PM', tag: 'SLA risk', tags: ['SLA risk', 'Invoice'], module: 'Billing', category: 'Billing & Account', comments: [], internalNotes: [], history: ['Ticket created via email', 'Priority raised to Critical'], archived: false },
-  { id: 1041, subject: 'Cannot invite a new workspace member', customer: 'Theo Martin', initials: 'TM', email: 'theo.martin@northwind.io', description: 'The invite button spins indefinitely for a new workspace member.', department: 'Core support', channel: 'Chat', priority: 'High', status: 'Pending', assignee: 'Ahmed Khan', sla: '02:18 left', created: '38 min ago', dueDate: 'Today, 11:00 PM', tag: 'Waiting on customer', tags: ['Invite', 'Workspace'], module: 'Core', category: 'Technical Issue', comments: ['Requested a screen recording from the customer.'], internalNotes: [], history: ['Ticket created via chat', 'Assigned to Ahmed Khan'], archived: false },
-  { id: 1040, subject: 'SSO setup questions for the finance team', customer: 'Priya Nair', initials: 'PN', email: 'priya.nair@contoso.com', description: 'Customer needs guidance for configuring SAML metadata and role mapping.', department: 'Enterprise', channel: 'Email', priority: 'Medium', status: 'Open', assignee: 'Sara Davis', sla: '05:40 left', created: '1 hr ago', dueDate: 'Tomorrow, 10:00 AM', tag: 'Enterprise', tags: ['SSO', 'Enterprise'], module: 'Authentication', category: 'General Support', comments: [], internalNotes: [], history: ['Ticket created via email'], archived: false },
-  { id: 1039, subject: 'Dashboard data is delayed by one hour', customer: 'Jon Bell', initials: 'JB', email: 'jon.bell@globex.com', description: 'Analytics dashboard is showing data from the previous hour.', department: 'Data support', channel: 'API', priority: 'High', status: 'Open', assignee: 'Kiran Shah', sla: '03:11 left', created: '2 hrs ago', dueDate: 'Today, 10:15 PM', tag: 'Data', tags: ['Analytics', 'Incident'], module: 'Core', category: 'Technical Issue', comments: [], internalNotes: [], history: ['Ticket created via API', 'Tagged as Incident'], archived: false },
-  { id: 1038, subject: 'How do I change my notification digest?', customer: 'Owen Wilson', initials: 'OW', email: 'owen.wilson@example.com', description: 'Customer asked where notification digest preferences can be changed.', department: 'Core support', channel: 'Web form', priority: 'Low', status: 'Resolved', assignee: 'Ahmed Khan', sla: 'Closed', created: 'Yesterday', dueDate: 'Closed', tag: 'How-to', tags: ['How-to'], module: 'Core', category: 'General Support', comments: ['Shared the notification preferences article.'], internalNotes: [], history: ['Ticket created via web form', 'Resolved by Ahmed Khan'], archived: true },
-]
-
-const initialCustomersSeed = [
-  { id: 1, name: 'Maya Chen', email: 'maya.chen@acme.co', company: 'Acme Corp', tier: 'Enterprise' },
-  { id: 2, name: 'Theo Martin', email: 'theo.martin@northwind.io', company: 'Northwind', tier: 'Pro' },
-  { id: 3, name: 'Priya Nair', email: 'priya.nair@contoso.com', company: 'Contoso', tier: 'Enterprise' },
-  { id: 4, name: 'Jon Bell', email: 'jon.bell@globex.com', company: 'Globex', tier: 'Pro' },
-  { id: 5, name: 'Owen Wilson', email: 'owen.wilson@example.com', company: 'Example Inc', tier: 'Standard' },
-]
-
-const initialStaffMembersSeed = [
-  { id: 1, name: 'Ahmed Khan', email: 'ahmed.khan@relaydesk.io', password: 'ahmed123', role: 'Support agent', department: 'Core support' },
-  { id: 2, name: 'Kiran Shah', email: 'kiran.shah@relaydesk.io', password: 'kiran123', role: 'Support agent', department: 'Finance support' },
-  { id: 3, name: 'Sara Davis', email: 'sara.davis@relaydesk.io', password: 'sara123', role: 'Support agent', department: 'Enterprise' },
-]
+import { initialTickets, initialCustomersSeed, initialStaffMembersSeed } from './demoData'
 
 const getNormalizedRole = (roleStr) => {
   if (!roleStr) return 'Customer'
@@ -258,6 +238,38 @@ function App() {
   const [departments, setDepartments] = useLocalStorageState('relay:departments', initialDepartments || [])
   const [activityLog, setActivityLog] = useLocalStorageState('relay:activity', [])
   const [storedAutomationRules, setAutomationRules] = useLocalStorageState('relay:automation-rules', initialAutomationRules)
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem('relay:tickets');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.length <= 5) {
+          const isLegacyOnly = parsed.every(t => [1038, 1039, 1040, 1041, 1042].includes(Number(t.id)));
+          if (isLegacyOnly) {
+            setTickets(initialTickets.map(enrichTicket));
+          }
+        }
+      }
+      const storedCust = localStorage.getItem('relay:customers');
+      if (storedCust) {
+        const parsedCust = JSON.parse(storedCust);
+        if (Array.isArray(parsedCust) && parsedCust.length <= 5) {
+          setCustomers(initialCustomersSeed);
+        }
+      }
+      const storedAgents = localStorage.getItem('relay:agents');
+      if (storedAgents) {
+        const parsedAgents = JSON.parse(storedAgents);
+        if (Array.isArray(parsedAgents) && parsedAgents.length <= 3) {
+          setAgents(initialStaffMembersSeed.map((ag) => ({
+            ...ag,
+            password: ag.password || 'agent123'
+          })));
+        }
+      }
+    } catch (_) {}
+  }, []);
 
   const [isChatOpen, setIsChatOpen] = useState(false)
   const [chatMessage, setChatMessage] = useState('')
@@ -595,7 +607,7 @@ function App() {
     if (fromState.length > 0) return [...new Set(fromState)]
     const safeTix = Array.isArray(tickets) ? tickets : (tickets?.tickets || tickets?.data || [])
     const fromTickets = safeTix.map((t) => t?.customer).filter(Boolean)
-    const seed = ['Maya Chen', 'Theo Martin', 'Priya Nair', 'Jon Bell', 'Owen Wilson']
+    const seed = initialCustomersSeed.map((c) => c.name)
     return [...new Set([...fromTickets, ...seed])]
   }, [customers, tickets])
 
@@ -603,7 +615,7 @@ function App() {
     const safeAgents = Array.isArray(agents) ? agents : (agents?.agents || agents?.data || [])
     const fromState = safeAgents.map((a) => (typeof a === 'string' ? a : a?.name)).filter(Boolean)
     if (fromState.length > 0) return [...new Set(fromState)]
-    return ['Kiran Shah', 'Ahmed Khan', 'Sara Davis', 'Maya Patel']
+    return initialStaffMembersSeed.map((a) => a.name)
   }, [agents])
 
   const availableDepartments = useMemo(() => {

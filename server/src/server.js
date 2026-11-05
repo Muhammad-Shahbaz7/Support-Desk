@@ -67,9 +67,17 @@ function getStoredAgents() {
     }
   } catch (_) {}
   return [
-    { id: 1, name: 'Ahmed Khan', email: 'ahmed.khan@relaydesk.io', password: 'ahmed123', role: 'Support agent', department: 'Core support', detail: 'Support agent · Core support' },
-    { id: 2, name: 'Kiran Shah', email: 'kiran.shah@relaydesk.io', password: 'kiran123', role: 'Support agent', department: 'Finance support', detail: 'Support agent · Finance support' },
-    { id: 3, name: 'Sara Davis', email: 'sara.davis@relaydesk.io', password: 'sara123', role: 'Support agent', department: 'Enterprise', detail: 'Support agent · Enterprise' }
+    { id: 1, name: 'Ahmed Khan', email: 'ahmed.khan@relaydesk.io', password: 'ahmed123', role: 'Support agent', department: 'Core support', detail: 'Senior Technical Support Engineer · Core support' },
+    { id: 2, name: 'Kiran Shah', email: 'kiran.shah@relaydesk.io', password: 'kiran123', role: 'Administrator', department: 'Leadership', detail: 'Head of Customer Experience · Leadership' },
+    { id: 3, name: 'Sara Davis', email: 'sara.davis@relaydesk.io', password: 'sara123', role: 'Support agent', department: 'Enterprise', detail: 'Enterprise Account Specialist · Enterprise' },
+    { id: 4, name: 'Maya Patel', email: 'maya.patel@relaydesk.io', password: 'maya123', role: 'Support agent', department: 'Leadership', detail: 'Support Operations Manager · Leadership' },
+    { id: 5, name: 'Elena Rostova', email: 'elena.rostova@relaydesk.io', password: 'elena123', role: 'Support agent', department: 'Finance support', detail: 'Senior Billing & Finance Lead · Finance support' },
+    { id: 6, name: 'Marcus Vance', email: 'marcus.vance@relaydesk.io', password: 'marcus123', role: 'Support agent', department: 'Technical Operations', detail: 'DevOps & Infrastructure Specialist · Technical Operations' },
+    { id: 7, name: 'Liam O\'Connor', email: 'liam.oconnor@relaydesk.io', password: 'liam123', role: 'Support agent', department: 'Data support', detail: 'Data Pipeline & BigQuery Specialist · Data support' },
+    { id: 8, name: 'Aisha Al-Mansoor', email: 'aisha.almansoor@relaydesk.io', password: 'aisha123', role: 'Support agent', department: 'Security & Compliance', detail: 'Identity & Security Engineer · Security & Compliance' },
+    { id: 9, name: 'Chen Wei', email: 'chen.wei@relaydesk.io', password: 'chen123', role: 'Support agent', department: 'Product Engineering', detail: 'Mobile SDK & API Specialist · Product Engineering' },
+    { id: 10, name: 'Sofia Rodriguez', email: 'sofia.rodriguez@relaydesk.io', password: 'sofia123', role: 'Support agent', department: 'Enterprise', detail: 'Customer Success Specialist · Enterprise' },
+    { id: 11, name: 'David Kim', email: 'david.kim@relaydesk.io', password: 'david123', role: 'Support agent', department: 'Core support', detail: 'Tier 1 Support Specialist · Core support' }
   ]
 }
 
