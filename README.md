@@ -3,7 +3,7 @@
 ---
 ## 📌 Submission Overview & Quick Links
 - **🌐 Live Demo Link:** []()
-- **📂 GitHub Repository:** [https://github.com/Kiran-Shahbaz1/Support-Desk](https://github.com/Kiran-Shahbaz1/Support-Desk)
+- **📂 GitHub Repository:** [https://github.com/Muhammad-Shahbaz7/Support-Desk](https://github.com/Muhammad-Shahbaz7/Support-Desk)
 ---
 ## 📖 Project Overview
 ### What Problem Does This Application Solve?
